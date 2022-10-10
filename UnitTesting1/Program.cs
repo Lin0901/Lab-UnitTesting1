@@ -56,7 +56,7 @@ public class VehicleTracker
         }
         catch (Exception e)
         {
-            throw new Exception("Need more than 0.");
+            throw new Exception("Should more than 0.");
         }
     }
 
@@ -106,6 +106,7 @@ public class VehicleTracker
         {
             if (vehicle == null)
                 continue;
+
             if (vehicle.Pass)
             {
                 passHolders.Add(vehicle);
@@ -117,7 +118,7 @@ public class VehicleTracker
     public int PassholderPercentage()
     {
         int passHolders = ParkedPassholders().Count();
-        int percentage = passHolders / (Capacity - SlotsAvailable) * 100;
+        int percentage = (passHolders / this.Capacity) * 100;
         return percentage;
     }
 }

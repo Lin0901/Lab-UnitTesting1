@@ -1,23 +1,25 @@
+using System.Diagnostics;
+
 namespace TestUnitTesting1
 {
     [TestClass]
     public class UnitTest1
     {
         [TestMethod]
-        public void TestSlotsAvailable()
+        public void TestGenerateSlotAvailable()
         {
             //Arrange
-            int capacity = 1;
+            int capacity = 3;
             string location = "MITT";
 
             //Act
             var testTracker = new VehicleTracker(capacity, location);
             var vehicle = new Vehicle("MB00", false);
-            testTracker.AddVehicle(vehicle);
 
             //Assert
-            Assert.AreEqual(testTracker.SlotsAvailable, 0);
+            Assert.AreEqual(capacity, testTracker.VehicleList.Count());
         }
+
 
         [TestMethod]
         public void TestAddingVehicle()
@@ -45,7 +47,7 @@ namespace TestUnitTesting1
             testTracker.RemoveVehicle("MB02");
 
             //Assert
-            Assert.IsTrue(vehicle != null);
+            Assert.IsTrue(testTracker.RemoveVehicle(1));
         }
 
         [TestMethod]
@@ -65,31 +67,29 @@ namespace TestUnitTesting1
 
         }
 
-        public void TestVehicleException()
+        [TestMethod]
+        public void TestParkedPassholders()
         {
             //Arrange
-            int capacity = 1;
+            int capacity = 3;
             string location = "MITT";
+            var parkedPassholders = 1;
 
             //Act
             var testTracker = new VehicleTracker(capacity, location);
-            var vehicle1 = new Vehicle("MB04", false);
-            var vehicle2 = new Vehicle("MB05", true);
-            var vehicle3 = new Vehicle("MB06", false);
+            var vehicle1 = new Vehicle("MB04", true);
+            var vehicle2 = new Vehicle("MB05", false);
+
+            testTracker.AddVehicle(vehicle1);
+            testTracker.AddVehicle(vehicle2);
+
 
             //Assert
-            Assert.ThrowsException<IndexOutOfRangeException>(() =>
-            {
-
-                testTracker.AddVehicle(vehicle1);
-                testTracker.AddVehicle(vehicle2);
-                testTracker.AddVehicle(vehicle3);
-
-            });
+            Assert.AreEqual(parkedPassholders, testTracker.ParkedPassholders().Count());
         }
 
         [TestMethod]
-        public void TestPercentagePassed()
+        public void TestPassholderPercentage()
         {
             //Arrange
             int capacity = 3;
@@ -97,15 +97,17 @@ namespace TestUnitTesting1
 
             //Act
             var testTracker = new VehicleTracker(capacity, location);
-            var vehicle1 = new Vehicle("MB07", true);
+            var vehicle1 = new Vehicle("MB07", false);
             var vehicle2 = new Vehicle("MB08", false);
 
             testTracker.AddVehicle(vehicle1);
             testTracker.AddVehicle(vehicle2);
 
-            //Assert
-            Assert.AreEqual(capacity, testTracker.VehicleList.Count);
+            int percentage = testTracker.PassholderPercentage();
+            int assertedPercentage = (2 / 3) * 100;
 
+            //Assert
+            Assert.AreEqual(assertedPercentage, percentage);
         }
 
 
